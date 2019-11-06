@@ -75,8 +75,8 @@ export class GameTicTacToe {
                 let xhr = new XMLHttpRequest();
                 xhr.open("POST", '/newgame');
                 xhr.send();
-                this._board = new GameField();
-                this.showField();
+                //this._board = new GameField();
+                //this.showField();
                 return this;
             }
         }

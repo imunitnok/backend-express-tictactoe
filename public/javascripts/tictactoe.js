@@ -458,9 +458,9 @@ function () {
           alert("Player ".concat(this.board.getPlayerName(player), " won!"));
           var xhr = new XMLHttpRequest();
           xhr.open("POST", '/newgame');
-          xhr.send();
-          this._board = new _gamefield.GameField();
-          this.showField();
+          xhr.send(); //this._board = new GameField();
+          //this.showField();
+
           return this;
         }
       }
