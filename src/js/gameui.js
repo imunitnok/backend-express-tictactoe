@@ -64,8 +64,8 @@ export class GameTicTacToe {
             let cell = row.cells[move.column - 1];
 
             switch(move.player) {
-                case 0: cell.innerHTML = "x"; cell.classList.add("player0"); break;
-                case 1: cell.innerHTML = "o"; cell.classList.add("player1"); break;
+                case 0: cell.innerHTML = 'x'; cell.classList.add("player0"); break;
+                case 1: cell.innerHTML = 'o'; cell.classList.add("player1"); break;
             }
         }
 

@@ -426,12 +426,12 @@ function () {
 
           switch (move.player) {
             case 0:
-              cell.innerHTML = '/x/i';
+              cell.innerHTML = 'x';
               cell.classList.add("player0");
               break;
 
             case 1:
-              cell.innerHTML = '/o/i';
+              cell.innerHTML = 'o';
               cell.classList.add("player1");
               break;
           }
