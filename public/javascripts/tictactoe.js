@@ -491,23 +491,13 @@ exports.GameTicTacToe = GameTicTacToe;
 
 var _gameui = require("./gameui");
 
-var startGame = function startGame() {
-  var body = document.getElementsByTagName("body")[0];
-  var reset = document.getElementsByTagName("input")[0];
-  body.style.height = window.innerHeight + "px";
-  var board = document.getElementById("board");
-  board.style.height = body.offsetHeight + "px";
-  var table = board.getElementsByClassName("table")[0]; //    let progress = board.getElementsByClassName("progress-bar")[0].firstElementChild;
-  //    let tableContainer = board.getElementsByClassName("table-container")[0];
-  //    tableContainer.style.height = body.offsetHeight + "px";
+var game;
 
-  var crutch = board.getElementsByClassName("crutch")[0];
-  crutch.style.height = body.offsetHeight + "px";
+var sync = function sync(table) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", '/gamestate');
   xhr.responseType = 'json';
   xhr.send();
-  var game;
 
   xhr.onload = function () {
     game = new _gameui.GameTicTacToe(table, document.createElement.bind(document));
@@ -540,7 +530,21 @@ var startGame = function startGame() {
 
     game.showField();
   };
+};
 
+var startGame = function startGame() {
+  var body = document.getElementsByTagName("body")[0]; //let reset = document.getElementsByTagName("input")[0];
+
+  body.style.height = window.innerHeight + "px";
+  var board = document.getElementById("board");
+  board.style.height = body.offsetHeight + "px";
+  var table = board.getElementsByClassName("table")[0]; //    let progress = board.getElementsByClassName("progress-bar")[0].firstElementChild;
+  //    let tableContainer = board.getElementsByClassName("table-container")[0];
+  //    tableContainer.style.height = body.offsetHeight + "px";
+
+  var crutch = board.getElementsByClassName("crutch")[0];
+  crutch.style.height = body.offsetHeight + "px";
+  sync(table);
   table.addEventListener("mousedown", function (ev) {
     var el = ev.target;
     ev.stopPropagation();
@@ -552,25 +556,21 @@ var startGame = function startGame() {
       var col = el.cellIndex;
 
       if (game.board.turn(row + 1, col + 1)) {
-        var _xhr = new XMLHttpRequest();
-
-        _xhr.open("POST", window.location.href);
-
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", window.location.href);
         var json = JSON.stringify({
           row: row,
           col: col,
+          pl: (game.board._player + 1) % 2 + 1,
           go: game.isGameOver((game.board._player + 1) % 2) ? 1 : 0
         });
+        xhr.open("POST", '/');
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.send(json);
 
-        _xhr.open("POST", '/');
-
-        _xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-
-        _xhr.send(json);
-
-        _xhr.onload = function () {
+        xhr.onload = function () {
           //window.location.href = '/';
-          if (_xhr.status == 200) game.showField();
+          if (xhr.status == 200) game.showField();else sync(table);
         };
       }
     }

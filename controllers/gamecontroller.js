@@ -37,6 +37,7 @@ let clearData = (req, callback) => {
     findGame(req, (game) => {
         game.board = Array(5).fill(Array(5).fill(0));
         game.gameover = 0;
+        game.cur_player = 1;
         game.moves = [];
         game.markModified('board');
         game.markModified('moves');
@@ -69,7 +70,7 @@ exports.move = (req, res, next) => {
         //     && -1 < col < game.size.height) {
         //     if (game.board[row][col] === 0) {
         //         game.board[row][col] = game.cur_player;
-        if(!game.gameover) {
+        if(!game.gameover && game.cur_player == req.body.pl) {
                 game.moves.push({ row: row, col: col, pl: game.cur_player });
                 game.cur_player = game.cur_player % game.pl_number + 1;
                 game.gameover = req.body.go;
@@ -79,6 +80,9 @@ exports.move = (req, res, next) => {
                 });
                 res.status(200);
                 res.send("Move was successful. Awaiting next move.");
+        } else {
+            res.status(500);
+            res.send("Something went wrong. Resync!");
         }
         //     } else {
         //         res.status(500);

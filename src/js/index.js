@@ -2,9 +2,28 @@
 
 import {GameTicTacToe} from "./gameui";
 
+
+var game;
+let sync = (table) => {
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", '/gamestate');
+    xhr.responseType = 'json';
+    xhr.send();
+    xhr.onload = function() {
+        game = new GameTicTacToe(table, document.createElement.bind(document));
+        let resp = xhr.response;
+        game.gameover = resp.gameover; 
+        game.board._player = (resp.player + 1) % 2;
+        for (let step of resp.moves) {
+            game.board.turn(step.row + 1, step.col + 1);
+        }
+        game.showField();
+    };
+}
+
 let startGame = function() {
     let body = document.getElementsByTagName("body")[0];
-    let reset = document.getElementsByTagName("input")[0];
+    //let reset = document.getElementsByTagName("input")[0];
 
     body.style.height = window.innerHeight + "px";
 
@@ -20,21 +39,7 @@ let startGame = function() {
     let crutch = board.getElementsByClassName("crutch")[0];
     crutch.style.height = body.offsetHeight + "px";
 
-    let xhr = new XMLHttpRequest();
-    xhr.open("GET", '/gamestate');
-    xhr.responseType = 'json';
-    xhr.send();
-    let game;
-    xhr.onload = function() {
-        game = new GameTicTacToe(table, document.createElement.bind(document));
-        let resp = xhr.response;
-        game.gameover = resp.gameover; 
-        game.board._player = (resp.player + 1) % 2;
-        for (let step of resp.moves) {
-            game.board.turn(step.row + 1, step.col + 1);
-        }
-        game.showField();
-    };
+    sync(table);
 
     table.addEventListener("mousedown", (ev) => {
         let el = ev.target;
@@ -51,6 +56,7 @@ let startGame = function() {
                 let json = JSON.stringify({
                     row: row,
                     col: col,
+                    pl: (game.board._player + 1) % 2 + 1,
                     go: game.isGameOver((game.board._player + 1) % 2) ? 1 : 0
                 });
                 xhr.open("POST", '/')
@@ -61,6 +67,7 @@ let startGame = function() {
                     //window.location.href = '/';
                     if (xhr.status == 200)
                         game.showField();
+                    else sync(table);
                 };
             }
         }
