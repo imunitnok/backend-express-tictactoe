@@ -8,7 +8,7 @@ var sassMiddleware = require('node-sass-middleware');
 //var indexRouter = require('./routes/index');
 //var usersRouter = require('./routes/users');
 var mongoose = require('mongoose');
-var mongoDB = process.env.MONGODB_URI || 'mongodb://127.0.0.1/games_database';
+var mongoDB = process.env.MONGODB_URI || 'mongodb+srv://imunitnok:36cbrfdrf36@timacluster-mj5jw.mongodb.net/test?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 
 var db = mongoose.connection;
