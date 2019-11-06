@@ -8,18 +8,22 @@ mixin addrow(row, rindex)
         else
             td
                 div
-                    form(method='POST' action='/')
-                        input(type="hidden" name="row" value= rindex)
-                        input(type="hidden" name="col" value= cindex)
-                        input(type='submit' value='')
+                    div
+                    //- form(method='POST' action='/')
+                    //-     input(type="hidden" name="row" value= rindex)
+                    //-     input(type="hidden" name="col" value= cindex)
+                    //-     input(type='submit' value='')
 
 block content
-
     div#board
-        table(class='table')
-            each row, rindex in board
-                tr
-                    +addrow(row, rindex)
+        div
+            table(class='table')
+                each row, rindex in board
+                    tr
+                        +addrow(row, rindex)
+            form(method='POST' action='/newgame')
+                button.reset(type='submit') Reset
+        div.crutch
 
-        form(method='POST' action='/newgame')
-            button.reset(type='submit') Reset
+
+    script(src="/javascripts/index.js")

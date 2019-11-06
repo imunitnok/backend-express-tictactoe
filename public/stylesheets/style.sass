@@ -34,6 +34,9 @@ html, body
     width: 100%
     text-align: center
     white-space: nowrap
+    >div
+      display: inline-block
+      vertical-align: middle
     .reset
       font-family: 'Cantarell Light', Arial, sans-serif
       font-size: 30px
@@ -43,6 +46,7 @@ html, body
       border: none
       border-radius: 5px
       &:hover
+        padding: 6px 19px
         background-color: white
         border: 1px solid $warning-color
         color: $warning-color
@@ -60,7 +64,6 @@ html, body
             height: 10px
             background-color: $info-bg
     .table
-        display: inline-block
         vertical-align: middle
         border-spacing: 0px
         border-collapse: collapse
@@ -90,7 +93,7 @@ html, body
             padding: 0
             margin: 0
             border: none
-          input[type='submit']
+          >div
             height: 60px
             width: 60px
             padding: 0
