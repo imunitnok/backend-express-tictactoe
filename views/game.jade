@@ -1,29 +1,26 @@
 extends layout
 
-mixin addrow(row, rindex)
-    each cell, cindex  in row
-        if cell !== 0
-            td
-                div(class='player player#{cell}')
-        else
-            td
-                div
-                    div
-                    //- form(method='POST' action='/')
-                    //-     input(type="hidden" name="row" value= rindex)
-                    //-     input(type="hidden" name="col" value= cindex)
-                    //-     input(type='submit' value='')
+//- mixin addrow(row, rindex)
+//-     each cell, cindex  in row
+//-         if cell !== 0
+//-             td
+//-                 //- div(class='player player#{cell}')
+//-         else
+//-             td
+//-                 div
+//-                     div
+//-                     //- form(method='POST' action='/')
+//-                     //-     input(type="hidden" name="row" value= rindex)
+//-                     //-     input(type="hidden" name="col" value= cindex)
+//-                     //-     input(type='submit' value='')
 
 block content
     div#board
         div
             table(class='table')
-                each row, rindex in board
-                    tr
-                        +addrow(row, rindex)
             form(method='POST' action='/newgame')
                 input.reset(type='submit' value='Reset')
         div.crutch
 
 
-    script(src="/javascripts/index.js")
+    script(src="/javascripts/tictactoe.js")

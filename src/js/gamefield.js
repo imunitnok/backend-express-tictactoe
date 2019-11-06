@@ -2,7 +2,7 @@
 
 const DEF_INIT_WIDTH = 5;
 const DEF_INIT_HEIGHT = 5;
-const DEF_SIDES_PADDINGS = 2;
+const DEF_SIDES_PADDINGS = 0;
 
 export class GameField {
 

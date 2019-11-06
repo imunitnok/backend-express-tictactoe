@@ -7,9 +7,10 @@ var GameSchema = new Schema({
     cur_player: { type: Number, min: 1, max: 8, required: true },
     name: String,
     size: { 
-        width: { type: Number, min: 5, required: true },
-        height: { type: Number, min: 5, required: true }
+        width: { type: Number, min: 5 },
+        height: { type: Number, min: 5 }
     },
+    moves: [{ row: Number, col: Number, pl: Number }],
     board: [[Number]]
 });
 

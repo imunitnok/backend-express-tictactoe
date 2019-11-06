@@ -45,15 +45,13 @@ export class GameTicTacToe {
      * 
      * @returns {GameTicTacToe} Current game object
      */
-    showField(createUIElement) {
+    showField() {
         this._uiBoard.innerHTML = "";
         let size = this.board.getFieldSize();
         for(let i = 0; i < size.height; i++) {
             let tr = this._showFunc("tr");
             for(let j = 0; j < size.width; j++) {
                 let td = this._showFunc("td");
-                let div = this._showFunc("div");
-                td.append(div);
                 tr.append(td);
             }
             this._uiBoard.append(tr);
@@ -63,22 +61,20 @@ export class GameTicTacToe {
         for (let move of this.board.moves) {
 
             let row = this._uiBoard.rows[move.row - 1];
-            let cell = row.cells[move.column - 1].getElementsByTagName("div")[0];
-
-            let mark = this._showFunc("div");
-            mark.classList.add("player");
+            let cell = row.cells[move.column - 1];
 
             switch(move.player) {
-                case 0: mark.classList.add("player0"); break;
-                case 1: mark.classList.add("player1"); break;
+                case 0: cell.innerHTML = "x"; cell.classList.add("player0"); break;
+                case 1: cell.innerHTML = "o"; cell.classList.add("player1"); break;
             }
-
-            cell.append(mark);
         }
 
         for(let player of Object.keys(this.board.scores)) {
             if(this.board.scores[player] >= LINE_LENGTH) {
                 alert(`Player ${this.board.getPlayerName(player)} won!`);
+                let xhr = new XMLHttpRequest();
+                xhr.open("POST", '/newgame');
+                xhr.send();
                 this._board = new GameField();
                 this.showField();
                 return this;

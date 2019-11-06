@@ -18,10 +18,6 @@ let startGame = function() {
     let crutch = board.getElementsByClassName("crutch")[0];
     crutch.style.height = body.offsetHeight + "px";
 
-//    let xhr = new XMLHttpRequest();
- //   xhr.open("GET", window.location.href);
-  //  xhr.send();
-
     board.addEventListener("mousedown", (ev) => {
         let el = ev.target.parentNode.parentNode;
         if(el.localName == "td") {
