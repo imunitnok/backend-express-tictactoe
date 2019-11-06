@@ -16,6 +16,7 @@ export class GameTicTacToe {
         this._uiBoard = uiBoard;
         this._uiProgress = uiProgress;
         this._width = 0;
+        this.gameover = 0;
         
         if(uiProgress !== undefined) {
             this.setTimer();
@@ -37,6 +38,10 @@ export class GameTicTacToe {
             }
             this._uiProgress.style.width = this._width + "%";
         }, 100);
+    }
+
+    isGameOver(player) {
+        return this.board.scores[player] >= LINE_LENGTH;
     }
 
     /**
@@ -70,14 +75,14 @@ export class GameTicTacToe {
         }
 
         for(let player of Object.keys(this.board.scores)) {
-            if(this.board.scores[player] >= LINE_LENGTH) {
+            if(this.isGameOver(player) && !this.gameover) {
                 alert(`Player ${this.board.getPlayerName(player)} won!`);
-                let xhr = new XMLHttpRequest();
-                xhr.open("POST", '/newgame');
-                xhr.send();
+                //let xhr = new XMLHttpRequest();
+                //xhr.open("POST", '/newgame');
+                //xhr.send();
                 //this._board = new GameField();
                 //this.showField();
-                return this;
+                this.gameover = 1;
             }
         }
 

@@ -11,7 +11,8 @@ var GameSchema = new Schema({
         height: { type: Number, min: 5 }
     },
     moves: [{ row: Number, col: Number, pl: Number }],
-    board: [[Number]]
+    board: [[Number]],
+    gameover: Number
 });
 
 module.exports = mongoose.model('Game', GameSchema)

@@ -360,6 +360,7 @@ function () {
     this._uiBoard = uiBoard;
     this._uiProgress = uiProgress;
     this._width = 0;
+    this.gameover = 0;
 
     if (uiProgress !== undefined) {
       this.setTimer();
@@ -384,6 +385,11 @@ function () {
 
         _this._uiProgress.style.width = _this._width + "%";
       }, 100);
+    }
+  }, {
+    key: "isGameOver",
+    value: function isGameOver(player) {
+      return this.board.scores[player] >= LINE_LENGTH;
     }
     /**
      * Set innerHTML of board element to empty string. After that
@@ -454,14 +460,14 @@ function () {
       for (var _i = 0, _Object$keys = Object.keys(this.board.scores); _i < _Object$keys.length; _i++) {
         var player = _Object$keys[_i];
 
-        if (this.board.scores[player] >= LINE_LENGTH) {
-          alert("Player ".concat(this.board.getPlayerName(player), " won!"));
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST", '/newgame');
-          xhr.send(); //this._board = new GameField();
+        if (this.isGameOver(player) && !this.gameover) {
+          alert("Player ".concat(this.board.getPlayerName(player), " won!")); //let xhr = new XMLHttpRequest();
+          //xhr.open("POST", '/newgame');
+          //xhr.send();
+          //this._board = new GameField();
           //this.showField();
 
-          return this;
+          this.gameover = 1;
         }
       }
 
@@ -487,6 +493,7 @@ var _gameui = require("./gameui");
 
 var startGame = function startGame() {
   var body = document.getElementsByTagName("body")[0];
+  var reset = document.getElementsByTagName("input")[0];
   body.style.height = window.innerHeight + "px";
   var board = document.getElementById("board");
   board.style.height = body.offsetHeight + "px";
@@ -505,12 +512,13 @@ var startGame = function startGame() {
   xhr.onload = function () {
     game = new _gameui.GameTicTacToe(table, document.createElement.bind(document));
     var resp = xhr.response;
+    game.gameover = resp.gameover;
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
 
     try {
-      for (var _iterator = resp[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      for (var _iterator = resp.moves[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
         var step = _step.value;
         game.board.turn(step.row + 1, step.col + 1);
       }
@@ -534,6 +542,8 @@ var startGame = function startGame() {
 
   table.addEventListener("mousedown", function (ev) {
     var el = ev.target;
+    ev.stopPropagation();
+    if (game.gameover) return;
 
     if (el.localName == "td") {
       var tr = el.parentNode;
@@ -547,7 +557,8 @@ var startGame = function startGame() {
 
         var json = JSON.stringify({
           row: row,
-          col: col
+          col: col,
+          go: game.isGameOver((game.board._player + 1) % 2) ? 1 : 0
         });
 
         _xhr.open("POST", '/');
@@ -562,8 +573,6 @@ var startGame = function startGame() {
         };
       }
     }
-
-    ev.stopPropagation();
   });
   document.removeEventListener("DOMContentLoaded", startGame);
 };

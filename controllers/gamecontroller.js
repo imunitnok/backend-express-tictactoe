@@ -17,14 +17,15 @@ let newGame = (req) => {
             pl_number: 2,
             cur_player: 1,
             size: { width: 5, height: 5 },
-            name: req.cookies.cookieName,
+            name: 'req.cookies.cookieName',
             board: Array(5).fill(Array(5).fill(0)),
+            gameover: 0,
             moves: []
         });
 }
 
 let findGame = (req, callback) => {
-    Game.findOne({'name': req.cookies.cookieName}).exec((err, game) => {
+    Game.findOne({'name': 'req.cookies.cookieName'}).exec((err, game) => {
         if(err) return next(err);
         if (game === null) {
             callback(newGame(req));
@@ -42,7 +43,7 @@ exports.getapp = (req, res, next) => {
 
 exports.getgame = (req, res, next) => {
     findGame(req, (game) => {
-        res.json(game.moves)
+        res.json({moves: game.moves, gameover: game.gameover});
     });
 }
 
@@ -63,6 +64,7 @@ exports.move = (req, res, next) => {
         //         game.board[row][col] = game.cur_player;
                 game.moves.push({ row: row, col: col, pl: game.cur_player });
                 game.cur_player = game.cur_player % game.pl_number + 1;
+                game.gameover = req.body.go;
                 game.markModified('board');
                 game.save((err) => {
                     if (err) { return next(err); }

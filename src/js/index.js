@@ -4,6 +4,8 @@ import {GameTicTacToe} from "./gameui";
 
 let startGame = function() {
     let body = document.getElementsByTagName("body")[0];
+    let reset = document.getElementsByTagName("input")[0];
+
     body.style.height = window.innerHeight + "px";
 
     let board = document.getElementById("board");
@@ -26,7 +28,8 @@ let startGame = function() {
     xhr.onload = function() {
         game = new GameTicTacToe(table, document.createElement.bind(document));
         let resp = xhr.response;
-        for (let step of resp) {
+        game.gameover = resp.gameover; 
+        for (let step of resp.moves) {
             game.board.turn(step.row + 1, step.col + 1);
         }
         game.showField();
@@ -34,16 +37,20 @@ let startGame = function() {
 
     table.addEventListener("mousedown", (ev) => {
         let el = ev.target;
+        ev.stopPropagation();
+        if(game.gameover) return;
         if(el.localName == "td") {
             let tr = el.parentNode;
             let row = tr.rowIndex;
             let col = el.cellIndex;
             if(game.board.turn(row + 1, col + 1)) {
+
                 let xhr = new XMLHttpRequest();
                 xhr.open("POST", window.location.href);
                 let json = JSON.stringify({
                     row: row,
-                    col: col
+                    col: col,
+                    go: game.isGameOver((game.board._player + 1) % 2) ? 1 : 0
                 });
                 xhr.open("POST", '/')
                 xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
@@ -56,7 +63,6 @@ let startGame = function() {
                 };
             }
         }
-        ev.stopPropagation();
     });
 
     document.removeEventListener("DOMContentLoaded", startGame);
