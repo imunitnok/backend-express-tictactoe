@@ -1,0 +1,25 @@
+extends layout
+
+mixin addrow(row, rindex)
+    each cell, cindex  in row
+        if cell !== 0
+            td
+                div(class='player player#{cell}')
+        else
+            td
+                div
+                    form(method='POST' action='/')
+                        input(type="hidden" name="row" value= rindex)
+                        input(type="hidden" name="col" value= cindex)
+                        input(type='submit' value='')
+
+block content
+
+    div#board
+        table(class='table')
+            each row, rindex in board
+                tr
+                    +addrow(row, rindex)
+
+        form(method='POST' action='/newgame')
+            button.reset(type='submit') Reset

@@ -1,0 +1,123 @@
+/*----- Main colors -----*/
+
+$base-color: rgb(54, 91, 146);
+$error-color: adjust-hue($base-color, 60);
+$info-color: adjust-hue($base-color, -60);
+$warning-color: adjust-hue($base-color, 120);
+$success-color: adjust-hue($base-color, -120);
+
+/*----- Style colors -----*/
+
+$primary-bg: lighten($base-color, 35%);
+$primary-border: darken(adjust-hue($primary-bg, -10), 5%);
+$primary-text: darken($primary-bg, 50%);
+
+$error-bg: lighten($error-color, 35%);
+$error-border: darken(adjust-hue($error-bg, -10), 5%);
+$error-text: darken($error-bg, 50%);
+
+$info-bg: lighten($info-color, 35%);
+$info-border: darken(adjust-hue($info-bg, -10), 5%);
+$info-text: darken($info-bg, 50%);
+
+$warning-bg: lighten($warning-color, 35%);
+$warning-border: darken(adjust-hue($warning-bg, -10), 5%);
+$warning-text: darken($warning-bg, 50%);
+
+$table-border: white;
+
+html, body
+    padding: 0
+    margin: 0
+
+#board
+    width: 100%
+    text-align: center
+    white-space: nowrap
+    .reset
+      font-family: 'Cantarell Light', Arial, sans-serif
+      font-size: 30px
+      padding: 7px 20px
+      background-color: $warning-color
+      color: white
+      border: none
+      border-radius: 5px
+      &:hover
+        background-color: white
+        border: 1px solid $warning-color
+        color: $warning-color
+      &:focus
+        outline: none
+        box-shadow: 0 0 0 3px $warning-bg, 0 0 0 1.5px $warning-bg
+      &:focus:not(:focus-visible)
+        box-shadow: none
+      &::-moz-focus-inner
+        border: none
+
+    .progress-bar
+        div
+            position: absolute
+            height: 10px
+            background-color: $info-bg
+    .table
+        display: inline-block
+        vertical-align: middle
+        border-spacing: 0px
+        border-collapse: collapse
+        border-radius: 20px
+        overflow: hidden
+        .player
+            width: 40px
+            height: 40px
+            margin: 10px
+            box-sizing: border-box
+            &1
+                background-color: $error-border
+                border: 1px solid $error-text
+            &2
+                background-color: $warning-border
+                border: 1px solid $warning-text
+                border-radius: 50%
+    td
+        padding: 0
+        background-color: $primary-bg
+        border: 1px solid $table-border
+        box-sizing: border-box
+        >div
+          form
+            height: 60px
+            width: 60px
+            padding: 0
+            margin: 0
+            border: none
+          input[type='submit']
+            height: 60px
+            width: 60px
+            padding: 0
+            margin: 0
+            border: none
+            background-color: transparent
+            &:hover
+              background-color: $primary-border
+    .crutch
+        display: inline-block
+        vertical-align: middle
+    .table-container
+        overflow: auto
+        &::-webkit-scrollbar
+            width: 10px
+            height: 10px
+            background-color: transparent
+        &::-webkit-scrollbar-thumb
+            border-radius: 10px
+            background: rgba(0,0,0,0.1)
+            border: 1px solid #aaa
+        &::-webkit-scrollbar-track
+            display: none
+            border-radius: 10px
+            background: rgba(0,0,0,0.1)
+            border: 1px solid #ccc
+        &::-webkit-scrollbar-thumb:hover
+            background: #fff
+        &::-webkit-scrollbar-thumb:active
+            background: linear-gradient(left, #22ADD4, #1E98BA)
