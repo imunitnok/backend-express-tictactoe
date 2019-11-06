@@ -26,6 +26,10 @@ $warning-text: darken($warning-bg, 50%);
 
 $table-border: white;
 
+@font-face
+    font-family: "Helvetica"
+    src: url("../fonts/helvetica-webfont.woff") format("woff"), url("../fonts/helvetica-webfont.woff2") format("woff2")
+
 html, body
     padding: 0
     margin: 0
@@ -74,13 +78,12 @@ html, body
             height: 40px
             margin: 10px
             box-sizing: border-box
-            // &1
-            //     background-color: $error-border
-            //     border: 1px solid $error-text
-            // &2
-            //     background-color: $warning-border
-            //     border: 1px solid $warning-text
-            //     border-radius: 50%
+            &0
+                content: "x";
+                background-color: rgb(124, 252, 0);
+            &1
+                content: "o";
+                background-color: rgb(250, 128, 114);
     td
         padding: 0
         background-color: $primary-bg
