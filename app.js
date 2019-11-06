@@ -3,8 +3,14 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var Promise = require("bluebird");
 var sassMiddleware = require( 'node-sass-middleware');
+
+var createError = require('http-errors');
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
+var Promise = require("bluebird");
 
 var app = express();
 
@@ -12,7 +18,7 @@ var app = express();
 var mongoose = require('mongoose');
 
 // Reading env variables (config example from https://github.com/sclorg/nodejs-ex/blob/master/server.js)
-var mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
+var mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL || 'mongodb+srv://imunitnok:36cbrfdrf36@timacluster-mj5jw.mongodb.net/test?retryWrites=true&w=majority',
     mongoURLLabel = "";
 
 // For local dev
@@ -56,12 +62,22 @@ if (mongoURL == null) {
 }
 
 // Connecting to DB
-mongoose.connect(mongoURL);
+mongoose.connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+//var indexRouter = require('./routes/index');
+//var usersRouter = require('./routes/users');
+//var mongoose = require('mongoose');
+//var mongoDB = process.env.MONGODB_URI || 'mongodb+srv://imunitnok:36cbrfdrf36@timacluster-mj5jw.mongodb.net/test?retryWrites=true&w=majority';
+//mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+
+//var db = mongoose.connection;
+//db.on('error', console.error.bind(console, 'MongoDB connection error: '));
+
 var gamesRouter = require('./routes/games');
+//var cookiesRouter = require('./routes/cookies')
 
 var app = express();
 
@@ -129,18 +145,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-// error handling
-app.use(function(err, req, res, next){
-  console.error(err.stack);
-  res.status(500).send('Something bad happened!');
-});
-
-initDb(function(err){
-  console.log('Error connecting to Mongo. Message:\n'+err);
-});
-
-app.listen(port, ip);
-console.log('Server running on http://%s:%s', ip, port);
 
 module.exports = app;
