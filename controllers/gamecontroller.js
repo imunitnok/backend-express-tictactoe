@@ -33,8 +33,15 @@ let findGame = (req, callback) => {
     });
 }
 
-let clearData = (callback) => {
-    Game.deleteMany({}, callback);
+let clearData = (req, callback) => {
+    findGame(req, (game) => {
+        game.board = Array(5).fill(Array(5).fill(0));
+        game.gameover = 0;
+        game.moves = [];
+        game.markModified('board');
+        game.markModified('moves');
+        game.save((err) => {callback()});
+    });
 }
 
 exports.getapp = (req, res, next) => {
@@ -43,12 +50,12 @@ exports.getapp = (req, res, next) => {
 
 exports.getgame = (req, res, next) => {
     findGame(req, (game) => {
-        res.json({moves: game.moves, gameover: game.gameover});
+        res.json({moves: game.moves, gameover: game.gameover, player: game.cur_player});
     });
 }
 
 exports.newgame = (req, res, next) => {
-    clearData((err) => {
+    clearData(req, (err) => {
         if (err) { return next(err) }
         res.redirect('/');
     });
@@ -62,6 +69,7 @@ exports.move = (req, res, next) => {
         //     && -1 < col < game.size.height) {
         //     if (game.board[row][col] === 0) {
         //         game.board[row][col] = game.cur_player;
+        if(!game.gameover) {
                 game.moves.push({ row: row, col: col, pl: game.cur_player });
                 game.cur_player = game.cur_player % game.pl_number + 1;
                 game.gameover = req.body.go;
@@ -71,6 +79,7 @@ exports.move = (req, res, next) => {
                 });
                 res.status(200);
                 res.send("Move was successful. Awaiting next move.");
+        }
         //     } else {
         //         res.status(500);
         //         res.send('Wrong place for another step');

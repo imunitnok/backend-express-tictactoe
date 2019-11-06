@@ -513,6 +513,7 @@ var startGame = function startGame() {
     game = new _gameui.GameTicTacToe(table, document.createElement.bind(document));
     var resp = xhr.response;
     game.gameover = resp.gameover;
+    game.board._player = (resp.player + 1) % 2;
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
