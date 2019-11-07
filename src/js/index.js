@@ -13,7 +13,7 @@ let sync = (table) => {
         game = new GameTicTacToe(table, document.createElement.bind(document));
         let resp = xhr.response;
         game.gameover = resp.gameover; 
-        game.board._player = (resp.player + 1) % 2;
+        //game.board._player = (resp.player + 1) % 2;
         for (let step of resp.moves) {
             game.board.turn(step.row + 1, step.col + 1);
         }
