@@ -62,6 +62,13 @@ exports.newgame = (req, res, next) => {
     });
 }
 
+let checkTurn = (row, col, moves) => {
+    for (let move of moves) {
+        if (row === move.row && col === move.col) return false;
+    }
+    return true;
+}
+
 exports.move = (req, res, next) => {
     findGame(req, (game) => {
         let row = req.body.row;
@@ -70,7 +77,7 @@ exports.move = (req, res, next) => {
         //     && -1 < col < game.size.height) {
         //     if (game.board[row][col] === 0) {
         //         game.board[row][col] = game.cur_player;
-        if(!game.gameover && game.cur_player == req.body.pl) {
+        if(!game.gameover && game.cur_player == req.body.pl && checkTurn(row, col, game.moves)) {
                 game.moves.push({ row: row, col: col, pl: game.cur_player });
                 game.cur_player = game.cur_player % game.pl_number + 1;
                 game.gameover = req.body.go;
